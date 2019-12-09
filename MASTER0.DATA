@@ -1,0 +1,269 @@
+-- THIS IS A SIMPLE 5 BY 5 QUARTER FIVE SPOT
+--
+RUNSPEC
+TITLE
+ THIS LINE IS A RUN TITLE
+
+DIMENS
+84 27 4 /
+
+OIL
+
+WATER
+
+FIELD
+
+FAULTDIM
+  200 /
+
+TABDIMS
+    2    1   20    2    1   20 /
+
+WELLDIMS
+    2    1    1    2 /
+
+START
+   1 'JAN' 1983  /
+
+NSTACK
+    40 /
+
+--FMTOUT
+
+--FMTIN
+
+UNIFIN
+UNIFOUT
+
+GRID
+
+EQUALS
+DX   100         /
+DY   100         /
+DZ     50        /
+--PORO    0.2      /
+--PERMX 700        /
+--PERMY 700        /
+--TOPS  4000 4* 1 1 /
+TOPS  4030 1 26 1 27 1 1 /
+TOPS  4000 27 84 1 27 1 1 /
+/
+
+
+INCLUDE
+   'KVANCOUVER.DAT'  /
+
+INCLUDE
+   'POROVANCOUVER.DAT'  /
+
+--EQUALS
+--PERMY   0.03 30 30 1 27 1 4 /
+--/
+
+MULTIPLY
+PERMY 0.82 1 80 1 25 1 4 /
+PORO  0.73 1 80 1 25 1 4 /
+/
+
+
+COPY
+ 'PERMY' 'PERMX' /
+ 'PERMX' 'PERMZ' /
+/
+
+
+MULTIPLY
+PERMZ 0.23 /
+/
+
+INCLUDE
+   'FAULT.DAT'  /
+
+
+--FAULTS
+--'31Z_F05' 26 26 26 26 1 1 'X'   /
+--'31Z_F05' 32 32 25 25 1 1 'X'   /
+--'31Z_F05' 41 41 24 24 1 1 'X'   /
+--'31Z_F05' 71 71 24 24 1 1 'X'   /
+--'31Z_F05' 81 81 25 25 1 1 'X'   /
+--'31Z_F05' 9 26 26 26 1 1 'Y'   /
+--'31Z_F05' 27 32 25 25 1 1 'Y'   /
+--'31Z_F05' 33 41 24 24 1 1 'Y'   /
+--'31Z_F05' 42 71 23 23 1 1 'Y'   /
+--'31Z_F05' 72 81 24 24 1 1 'Y'   /
+--'31Z_F05' 82 84 25 25 1 1 'Y'   /
+-/
+
+
+MULTFLT
+'31Z_F05'      0.002000      /
+/
+
+RPTGRID
+1 1 1 1 1 0 0 0 /
+
+DEBUG
+ 0 0 1 0 1 0 1  /
+
+
+INIT
+
+PROPS     ==============================================================
+
+--SWFN
+--    .25    .0    4.0
+--    .7    1.0     .0
+--/
+--SOF2       1 TABLES   20 NODES IN EACH           FIELD   13:34  5 MAY 85
+--    .3000  .0000
+--    .7500 1.0000
+--/
+
+-- Water and oil rel perms & capillary pressures
+--         Sw       Krw      Kro      Pc
+--       -----     -----     ---     ----
+SWOF
+-- table for 1000mD
+          0.15      0.0       0.9     4.0
+          0.45      0.2       0.3     0.8
+          0.68      0.4       0.1     0.2
+          0.8       0.85      0.0     0.1 / 
+/
+-- table for 200mD
+--            0.25      0.0        0.54     9.0
+--            0.5       0.18       0.18     1.8
+--            0.7       0.36       0.06     0.45
+--            0.8       0.495      0.0      0.22 / table 2
+
+PVTW
+  .0  1.0  3.03E-06  .5  0.0 /
+
+PVDO
+  .0     1.0     2.0
+ 136.0   .996    1.167
+/
+
+ROCK
+ 4000.0         .30E-05 /
+
+DENSITY
+ 52.0000  64.0000   .04400 /
+
+RPTPROPS
+    2*0 /
+
+REGIONS    =============================================================
+
+SATNUM
+9072*1 /
+
+--SATNUM
+--2 25 27 1 27 1 4 /
+--BOX
+--1 24 1 27 1 4 /
+--SATNUM
+--2592*1 /
+
+--BOX
+--25 27 1 27 1 4 /
+--SATNUM
+--324*2  /
+
+--BOX
+--28 84 1 27 1 4 /
+--SATNUM
+--6156*1 /
+
+
+
+SOLUTION   =============================================================
+
+EQUIL
+4000  4000  6000  0   0   0   0   0   0  /
+
+RPTSOL
+1 0 1 /
+
+SUMMARY    ===========================================================
+
+FOPR
+/
+
+FWIR
+/
+
+FWPR
+/
+
+WBHP
+/
+
+
+RPTONLY
+RUNSUM
+SEPARATE
+--LOTUS
+EXCEL 
+
+SCHEDULE   ===========================================================
+
+RPTSCHED                                         FIELD   16:55 18 APR 86
+   1   0   1   0   0   0   1   0   0   0   0   2   0   0   0   0   0
+   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   /
+
+OUTSOL
+SWAT SOIL XMF YMF PRESSURE/
+
+RPTSCHED
+SWAT SOIL PRESSURE/
+
+
+WELSPECS
+'I'  'G'   10  10  4000  'WAT'  /
+'P'  'G'   70  10  4000  'OIL'  /
+/
+
+GRADRFT
+PRESSURE /
+SWAT /
+SGAS /
+/
+
+COMPDAT
+'I       '   10   10   1   1 'OPEN'   0  .0   1.0 /
+'P       '   70   10   1   1 'OPEN'   0  .0   1.0 /
+/
+
+
+
+WCONPROD
+'P' 'OPEN' 'BHP' 5* 140 /
+/
+
+WCONINJE
+'I' 'WAT' 'OPEN' 'RATE' 15000.0 /
+/
+
+TSTEP
+ 1*1 10*200 
+/
+
+WCONINJE
+'I' 'WAT' 'OPEN' 'RATE' 12000.0 /
+/
+
+TSTEP
+ 2*100
+/
+
+WCONINJE
+'I' 'WAT' 'OPEN' 'RATE' 10000.0 /
+/
+
+TSTEP
+ 3*100
+/
+
+
+END
